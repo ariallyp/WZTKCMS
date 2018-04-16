@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientVersionMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into clientplug_version(
+			TYPE,	
+			VER_CODE,	
+			VER_NAME,	
+			VER_DESCRIPTION,	
+			DOWNLOAD_URL,	
+			LAN_URL,	
+			FILE_NAME,
+			PACKAGE_NAME,	
+			CREATED,	
+			UPDATED,
+			APPID,	
+			ID
+		) values (
+			#{TYPE},	
+			#{VER_CODE},	
+			#{VER_NAME},	
+			#{VER_DESCRIPTION},	
+			#{DOWNLOAD_URL},	
+			#{LAN_URL},	
+			#{FILE_NAME},
+			#{PACKAGE_NAME},	
+			#{CREATED},	
+			#{UPDATED},
+			#{APP_ID},	
+			#{CLIENTVERSION_ID}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from clientplug_version
+		where 
+			ID = #{CLIENTVERSION_ID}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  clientplug_version
+			set 
+				TYPE = #{TYPE},
+				VER_CODE = #{VER_CODE},
+				VER_NAME = #{VER_NAME},
+				VER_DESCRIPTION = #{VER_DESCRIPTION},
+				DOWNLOAD_URL = #{DOWNLOAD_URL},
+				LAN_URL = #{LAN_URL},
+				UPDATED = #{UPDATED},
+				PACKAGE_NAME = #{PACKAGE_NAME},
+				FILE_NAME = #{FILE_NAME},
+				APPID = #{APP_ID},
+			ID = ID
+			where 
+				ID = #{CLIENTVERSION_ID}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			TYPE,	
+			VER_CODE,	
+			VER_NAME,	
+			VER_DESCRIPTION,	
+			DOWNLOAD_URL,	
+			LAN_URL,	
+			FILE_NAME,	
+			CREATED,	
+			UPDATED,
+			PACKAGE_NAME,
+			APPID AS APP_ID,	
+			ID AS CLIENTVERSION_ID 
+		from 
+			clientplug_version
+		where 
+			ID = #{CLIENTVERSION_ID}
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+				a.TYPE,	
+				a.VER_CODE,	
+				a.VER_NAME,	
+				a.VER_DESCRIPTION,	
+				a.DOWNLOAD_URL,	
+				a.LAN_URL,	
+				a.FILE_NAME,
+				a.PACKAGE_NAME,
+				a.APPID,	
+				a.CREATED,	
+				a.UPDATED,	
+				a.ID  AS CLIENTVERSION_ID,
+				b.name AS APP_NAME 
+		from 
+				clientplug_version a ,application b 
+		where a.APPID=b.ID 	
+				
+		and 1 = 1 
+
+		<if test="pd.NAME != null and pd.NAME != ''"><!-- 关键词检索 -->
+			and
+				(
+					 a.VER_NAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					
+				)
+		</if>
+		<if test="pd.APP_ID != null and pd.APP_ID != ''"><!-- 租户检索 -->
+			and a.APPID=#{pd.APP_ID} 
+		</if>
+		
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+			and a.CREATED &gt;= #{pd.lastLoginStart}
+		</if>
+		
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+			and a.UPDATED &lt;= #{pd.lastLoginEnd}
+		</if>
+			
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.TYPE,	
+				a.VER_CODE,	
+				a.VER_NAME,	
+				a.VER_DESCRIPTION,	
+				a.DOWNLOAD_URL,	
+				a.LAN_URL,	
+				a.FILE_NAME,
+				a.PACKAGE_NAME,	
+				a.CREATED,	
+				a.UPDATED,	
+				a.ID AS CLIENTVERSION_ID 
+		from 
+				clientplug_version a
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from clientplug_version
+		where 
+			ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>

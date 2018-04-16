@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ClientMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into client(
+			USER_ID,	
+			TYPE,	
+			DEVICE_ID,	
+			DEVICE_NAME,	
+			BINDSTATUS,	
+			LATEST_LOGIN_TIME,	
+			CREATED,	
+			UPDATED,	
+			ID
+		) values (
+			#{USER_ID},	
+			#{TYPE},	
+			#{DEVICE_ID},	
+			#{DEVICE_NAME},	
+			#{BINDSTATUS},	
+			#{LATEST_LOGIN_TIME},	
+			#{CREATED},	
+			#{UPDATED},	
+			#{CLIENT_ID}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from client
+		where 
+			ID = #{CLIENT_ID}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  client
+			set 
+				
+				BINDSTATUS = #{BINDSTATUS},
+				UPDATED = #{UPDATED}
+			where 
+				ID = #{CLIENT_ID}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			a.USER_ID,	
+			a.TYPE,	
+			a.DEVICE_ID,	
+			a.DEVICE_NAME,	
+			a.BINDSTATUS,	
+			a.LATEST_LOGIN_TIME,	
+			a.CREATED,	
+			a.UPDATED,	
+			a.ID AS CLIENT_ID,
+			u.NAME AS USERNAME 
+		from 
+			client a,user u
+		where a.USER_ID=u.ID and
+		
+			a.ID = #{CLIENT_ID}
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+				a.USER_ID,	
+				a.TYPE,	
+				a.DEVICE_ID,	
+				a.DEVICE_NAME,	
+				a.BINDSTATUS,	
+				a.LATEST_LOGIN_TIME,	
+				a.CREATED,	
+				a.UPDATED,	
+				a.ID AS CLIENT_ID,
+				u.name AS USERNAME  
+		from 
+				client a ,user u 
+				
+				where a.USER_ID=u.ID 
+				
+				and 1 = 1 
+
+		<if test="pd.NAME != null and pd.NAME != ''"><!-- 关键词检索 -->
+			and
+				(
+					 u.NAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					
+				)
+		</if>
+		<if test="pd.BINDSTATUS != null and pd.BINDSTATUS != ''"><!-- 关键词检索 -->
+			and a.BINDSTATUS=#{pd.BINDSTATUS} 
+				
+		</if>
+		
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+			and a.CREATED &gt;= #{pd.lastLoginStart}
+		</if>
+		
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+			and a.UPDATED &lt;= #{pd.lastLoginEnd}
+		</if>
+				
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.USER_ID,	
+				a.TYPE,	
+				a.DEVICE_ID,	
+				a.DEVICE_NAME,	
+				a.BINDSTATUS,	
+				a.LATEST_LOGIN_TIME,	
+				a.CREATED,	
+				a.UPDATED,	
+				a.ID AS CLIENT_ID
+		from 
+				client a
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from client
+		where 
+			ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>

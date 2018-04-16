@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AppAlowMapper">
+
+ <delete id="deleteByUserIdAPPU" parameterType="pd" >
+    delete from app_user
+    where uid = #{WIZUSERS_ID}
+    
+  </delete>
+
+
+
+ <delete id="deleteByUserIdUU" parameterType="pd" >
+    delete from user_user
+    where from_user_id = #{WIZUSERS_ID}
+    or to_user_id=#{WIZUSERS_ID}
+  </delete>	
+
+
+
+	<delete id="deleteByUserId" parameterType="pd">
+		delete from app_user_allow
+		where uid = #{WIZUSERS_ID}
+	</delete>
+
+
+	<!-- 通过ID获取数据 -->
+	<select id="findByAppAlowId" parameterType="pd" resultType="pd">
+		select
+		TYPE,
+		ID AS ALOW_ID
+		from
+		app_user_allow
+		where
+		ID = #{ALOW_ID}
+	</select>
+
+
+	<!-- 列表 app-alow 应用权限管理SQL -->
+	<select id="datalistPageByAppAlow" parameterType="page"
+		resultType="pd">
+		SELECT
+		a.NAME AS USERNAME,
+		a.nickname AS NICKNAME,
+		n.name AS APP_NAME,
+		n.avatar AS AVATAR,
+		a.ID AS WIZUSERS_ID,
+		w.TYPE AS TYPE,
+		w.id AS ALOW_ID
+
+		FROM
+		app_user_allow w LEFT JOIN user a
+		ON w.uid=a.id LEFT JOIN
+		application n
+		ON w.appId = n.id LEFT JOIN org_user r on a.id=r.user_id
+		where 1=1
+
+		<if test="pd.ORG_ID != null and pd.ORG_ID != ''"><!-- 租户检索 -->
+			and r.org_id=#{pd.ORG_ID}
+		</if>
+
+		<if test="pd.NAME != null and pd.NAME != ''"><!-- 关键词检索 -->
+			and
+				
+				(
+					 a.NAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					 or
+					 a.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					 or
+					 a.NAME_QUANPIN LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					 or
+					 a.EMAIL LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					 or
+					 a.NAME_PY LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					
+				)
+		</if>
+		<if test="pd.APP_ID != null and pd.APP_ID != ''"><!-- 租户检索 -->
+			and n.id=#{pd.APP_ID} 
+		</if>
+	</select>
+	<!-- 修改 app alow -->
+	<update id="editAppAlow" parameterType="pd">
+		update app_user_allow
+		set
+		TYPE = #{TYPE}
+		where
+		ID = #{ALOW_ID}
+	</update>
+
+	<update id="batchUpdate" parameterType="List">
+		update app_user_allow
+		set
+		TYPE = #{TYPE}
+		where
+
+		ID in
+		<foreach item="item" index="index" collection="list" open="began"
+			separator="" close="end;">
+			#{item}
+		</foreach>
+	</update>
+</mapper>

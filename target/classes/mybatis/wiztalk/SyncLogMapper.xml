@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SyncLogMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into tb_synclog(
+			TYPE,	
+			APPID,	
+			WSDLSITE,	
+			TENANTIDORGID,	
+			RESULT,	
+			CREATED,	
+			SYNCLOG_ID
+		) values (
+			#{TYPE},	
+			#{APPID},	
+			#{WSDLSITE},	
+			#{TENANTIDORGID},	
+			#{RESULT},	
+			#{CREATED},	
+			#{SYNCLOG_ID}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from tb_synclog
+		where 
+			SYNCLOG_ID = #{SYNCLOG_ID}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  tb_synclog
+			set 
+				TYPE = #{TYPE},
+				APPID = #{APPID},
+				WSDLSITE = #{WSDLSITE},
+				TENANTIDORGID = #{TENANTIDORGID},
+				RESULT = #{RESULT},
+				CREATED = #{CREATED},
+			SYNCLOG_ID = SYNCLOG_ID
+			where 
+				SYNCLOG_ID = #{SYNCLOG_ID}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			TYPE,	
+			APPID,	
+			WSDLSITE,	
+			TENANTIDORGID,	
+			RESULT,	
+			CREATED,	
+			SYNCLOG_ID
+		from 
+			tb_synclog
+		where 
+			SYNCLOG_ID = #{SYNCLOG_ID}
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+				a.TYPE,	
+				a.APPID,	
+				a.WSDLSITE,	
+				a.TENANTIDORGID,	
+				a.RESULT,	
+				a.CREATED,	
+				a.SYNCLOG_ID
+		from 
+				tb_synclog a 
+		where	1=1	
+		<if test="pd.NAME != null and pd.NAME != ''"><!-- 关键词检索 -->
+			and
+				(
+					 a.TYPE LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					 or
+					 a.RESULT LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					
+				)
+		</if>	
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+			and a.CREATED &gt;= #{pd.lastLoginStart}
+		</if>
+		
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+			and a.CREATED &lt;= #{pd.lastLoginEnd} 
+		</if>
+			ORDER BY a.CREATED desc			
+				
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.TYPE,	
+				a.APPID,	
+				a.WSDLSITE,	
+				a.TENANTIDORGID,	
+				a.RESULT,	
+				a.CREATED,	
+				a.SYNCLOG_ID
+		from 
+				tb_synclog a 
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from tb_synclog
+		where 
+			SYNCLOG_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WizClientVersionMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into client_version(
+			TYPE,	
+			VER_CODE,	
+			VER_NAME,	
+			VER_DESCRIPTION,	
+			DOWNLOAD_URL,	
+			LAN_URL,	
+			FILE_NAME,	
+			CREATED,	
+			UPDATED,	
+			ID
+		) values (
+			#{TYPE},	
+			#{VER_CODE},	
+			#{VER_NAME},	
+			#{VER_DESCRIPTION},	
+			#{DOWNLOAD_URL},	
+			#{LAN_URL},	
+			#{FILE_NAME},	
+			#{CREATED},	
+			#{UPDATED},	
+			#{WIZCLIENTVERSION_ID}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from client_version
+		where 
+			ID = #{WIZCLIENTVERSION_ID}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  client_version
+			set 
+				TYPE = #{TYPE},
+				VER_CODE = #{VER_CODE},
+				VER_NAME = #{VER_NAME},
+				VER_DESCRIPTION = #{VER_DESCRIPTION},
+				DOWNLOAD_URL = #{DOWNLOAD_URL},
+				LAN_URL = #{LAN_URL},
+				FILE_NAME = #{FILE_NAME},
+			ID = ID
+			where 
+				ID = #{WIZCLIENTVERSION_ID}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			TYPE,	
+			VER_CODE,	
+			VER_NAME,	
+			VER_DESCRIPTION,	
+			DOWNLOAD_URL,	
+			LAN_URL,	
+			FILE_NAME,	
+			CREATED,	
+			UPDATED,	
+			ID AS WIZCLIENTVERSION_ID
+		from 
+			client_version
+		where 
+			ID = #{WIZCLIENTVERSION_ID}
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+				a.TYPE,	
+				a.VER_CODE,	
+				a.VER_NAME,	
+				a.VER_DESCRIPTION,	
+				a.DOWNLOAD_URL,	
+				a.LAN_URL,	
+				a.FILE_NAME,	
+				a.CREATED,	
+				a.UPDATED,	
+				a.ID  AS WIZCLIENTVERSION_ID
+		from 
+				client_version a 
+				where 1=1 
+				
+		<if test="pd.TYPE != null and pd.TYPE != ''"><!-- 租户检索 -->
+			and a.TYPE=#{pd.TYPE} 
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.TYPE,	
+				a.VER_CODE,	
+				a.VER_NAME,	
+				a.VER_DESCRIPTION,	
+				a.DOWNLOAD_URL,	
+				a.LAN_URL,	
+				a.FILE_NAME,	
+				a.CREATED,	
+				a.UPDATED,	
+				a.ID AS WIZCLIENTVERSION_ID
+		from 
+				client_version a
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from client_version
+		where 
+			ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>

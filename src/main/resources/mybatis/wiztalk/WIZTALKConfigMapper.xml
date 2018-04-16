@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WIZTALKConfigMapper">
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into wiztalkconfig(
+			APPNAME,	
+			XMPP_HOST_NAME,	
+			XMPP_HOST_IP,	
+			XMPP_FILE_SERVER_IP,	
+			XMPP_HOST_PORTIN,	
+			XMPP_SIGN_PORTIN,	
+			XMPP_REQUST_PORTIN,	
+			TYPE,	
+			TARGET,	
+			POINTINSPECTION_URL,	
+			WIZTALKCONFIG_ID
+		) values (
+			#{APPNAME},	
+			#{XMPP_HOST_NAME},	
+			#{XMPP_HOST_IP},	
+			#{XMPP_FILE_SERVER_IP},	
+			#{XMPP_HOST_PORTIN},	
+			#{XMPP_SIGN_PORTIN},	
+			#{XMPP_REQUST_PORTIN},	
+			#{TYPE},	
+			#{TARGET},	
+			#{POINTINSPECTION_URL},	
+			#{WIZTALKCONFIG_ID}
+		)
+	</insert>
+	
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from wiztalkconfig
+		where 
+			WIZTALKCONFIG_ID = #{WIZTALKCONFIG_ID}
+	</delete>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  wiztalkconfig
+			set 
+				APPNAME = #{APPNAME},
+				XMPP_HOST_NAME = #{XMPP_HOST_NAME},
+				XMPP_HOST_IP = #{XMPP_HOST_IP},
+				XMPP_FILE_SERVER_IP = #{XMPP_FILE_SERVER_IP},
+				XMPP_HOST_PORTIN = #{XMPP_HOST_PORTIN},
+				XMPP_SIGN_PORTIN = #{XMPP_SIGN_PORTIN},
+				XMPP_REQUST_PORTIN = #{XMPP_REQUST_PORTIN},
+				TYPE = #{TYPE},
+				TARGET = #{TARGET},
+				POINTINSPECTION_URL = #{POINTINSPECTION_URL},
+			WIZTALKCONFIG_ID = WIZTALKCONFIG_ID
+			where 
+				WIZTALKCONFIG_ID = #{WIZTALKCONFIG_ID}
+	</update>
+	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			APPNAME,	
+			XMPP_HOST_NAME,	
+			XMPP_HOST_IP,	
+			XMPP_FILE_SERVER_IP,	
+			XMPP_HOST_PORTIN,	
+			XMPP_SIGN_PORTIN,	
+			XMPP_REQUST_PORTIN,	
+			TYPE,	
+			TARGET,	
+			POINTINSPECTION_URL,	
+			WIZTALKCONFIG_ID
+		from 
+			wiztalkconfig
+		where 
+			WIZTALKCONFIG_ID = #{WIZTALKCONFIG_ID}
+	</select>
+	
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+				a.APPNAME,	
+				a.XMPP_HOST_NAME,	
+				a.XMPP_HOST_IP,	
+				a.XMPP_FILE_SERVER_IP,	
+				a.XMPP_HOST_PORTIN,	
+				a.XMPP_SIGN_PORTIN,	
+				a.XMPP_REQUST_PORTIN,	
+				a.TYPE,	
+				a.TARGET,	
+				a.POINTINSPECTION_URL,	
+				a.WIZTALKCONFIG_ID
+		from 
+				wiztalkconfig a order by a.TARGET
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+				a.APPNAME,	
+				a.XMPP_HOST_NAME,	
+				a.XMPP_HOST_IP,	
+				a.XMPP_FILE_SERVER_IP,	
+				a.XMPP_HOST_PORTIN,	
+				a.XMPP_SIGN_PORTIN,	
+				a.XMPP_REQUST_PORTIN,	
+				a.TYPE,	
+				a.TARGET,	
+				a.POINTINSPECTION_URL,	
+				a.WIZTALKCONFIG_ID
+		from 
+				wiztalkconfig a
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from wiztalkconfig
+		where 
+			WIZTALKCONFIG_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+</mapper>
