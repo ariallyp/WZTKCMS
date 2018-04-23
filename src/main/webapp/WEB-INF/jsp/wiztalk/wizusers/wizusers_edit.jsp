@@ -211,7 +211,7 @@
 				</tr>
 			 <tr>
 					<td style="width: 70px; text-align: right; padding-top: 13px;">密码:</td>
-					<td><input type="text" name="PASSWORD" id="PASSWORD" value=""
+					<td><input type="password" name="PASSWORD" id="PASSWORD" value=""
 						maxlength="32" placeholder="这里输入密码" title="PASSWORD" /></td>
 				</tr>
 
