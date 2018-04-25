@@ -54,11 +54,11 @@
 			<!-- 检索  -->
 		
 		
-			<table id="table_report" class="table table-striped table-bordered table-hover">
+			<table id="table_report"  style="table-layout:fixed" class="table table-striped table-bordered table-hover">
 				
 				<thead>
 					<tr>
-						<th class="center">
+						<th width="4%"class="center">
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
 						<th class="center">序号</th>
@@ -67,11 +67,11 @@
 						<th class="center">版本</th>
 						<th class="center">版本名称</th>
 						<th class="center">描述</th>
-						<th class="center">外网地址</th>
- 						<th class="center">内网地址</th>
-						<th class="center">文件名</th>
-						<th class="center">包名</th>
-						<th class="center">操作</th>
+						<th width="20%" class="center">外网地址</th>
+ 						<th width="20%" class="center">内网地址</th>
+<!-- 						<th class="center">文件名</th>
+ -->						<th class="center">包名</th>
+						<th width="4%" class="center">操作</th>
 					</tr>
 				</thead>
 										
@@ -92,10 +92,10 @@
 										<td>${var.VER_CODE}</td>
 										<td>${var.VER_NAME}</td>
 										<td>${var.VER_DESCRIPTION}</td>
-										<td><a href="${var.DOWNLOAD_URL}" title="点击下载或访问">${var.DOWNLOAD_URL}</a></td>
- 										<td>${var.LAN_URL}</td>
-										<td>${var.FILE_NAME}</td>
-										<td>${var.PACKAGE_NAME}</td>
+										<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;"><a href="${var.DOWNLOAD_URL}" title="点击下载或访问">${var.DOWNLOAD_URL}</a></td>
+ 										<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${var.LAN_URL}</td>
+										<%-- <td>${var.FILE_NAME}</td> --%>
+										<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${var.PACKAGE_NAME}</td>
 								<td style="width: 30px;" class="center">
 									<div class='hidden-phone visible-desktop btn-group'>
 									

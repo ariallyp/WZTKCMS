@@ -98,6 +98,7 @@ public class WizUsersController extends BaseController {
 		pd = this.getPageData();
 		String DATA_IDS = pd.getString("DATA_IDS");
 		String APPID =pd.getString("APP_ID");
+		String type = pd.getString("type");
 		pd.put("APPID", APPID);
 		if(Tools.notEmpty(DATA_IDS)){
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
@@ -107,7 +108,7 @@ public class WizUsersController extends BaseController {
 				pd.put("UID", UID);
 				if(wizusersService.findByUserApp(pd) == null){
 					pd.put("ID", this.get32UUID());
-					pd.put("TYPE", "1");
+					pd.put("TYPE", type);
 					wizusersService.saveUserApp(pd);
 					
 				}

@@ -425,11 +425,11 @@
 						 top.jzts();
 						 var diag = new top.Dialog();
 						 diag.Drag=true;
-						 diag.Title ="新增";
+						 diag.Title ="添加应用";
 						 diag.URL = '<%=basePath%>wizusers/goAddAPP.do?DATA_IDS='+str;
 
-						 diag.Width = 330;
-						 diag.Height = 300;
+						 diag.Width = 360;
+						 diag.Height = 400;
 						 diag.CancelEvent = function(){ //关闭事件
 							 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 								 if('${page.currentPage}' == '0'){

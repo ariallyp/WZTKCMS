@@ -51,23 +51,23 @@
 			<!-- 检索  -->
 		
 		
-			<table id="table_report" class="table table-striped table-bordered table-hover">
+			<table id="table_report"  style="table-layout:fixed" class="table table-striped table-bordered table-hover">
 				
 				<thead>
 					<tr>
-						<th class="center">
+						<th  width="2%" class="center">
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
-						<th class="center">序号</th>
-						<th class="center">类型</th>
-						<th class="center">版本号</th>
-						<th class="center">版本名称</th>
-						<th class="center">描述</th>
-						<th class="center">外网地址</th>
-						<th class="center">内网地址</th>
-						<th class="center">文件名称</th>
+						<th width="5%" class="center">序号222</th>
+						<th width="5%" class="center">类型</th>
+						<th width="5%" class="center">版本号</th>
+						<th width="5%" class="center">版本名称</th>
+						<th width="18%"class="center">描述</th>
+						<th width="20%"class="center">外网地址</th>
+						<th width="20%"class="center">内网地址</th>
+						<th width="10%" class="center">文件名称</th>
 						
-						<th class="center">操作</th>
+						<th width="10%" class="center">操作</th>
 					</tr>
 				</thead>
 										
@@ -86,8 +86,8 @@
 										<td>${var.TYPE}</td>
 										<td>${var.VER_CODE}</td>
 										<td>${var.VER_NAME}</td>
-										<td>${var.VER_DESCRIPTION}</td>
-										<td>${var.DOWNLOAD_URL}</td>
+										<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${var.VER_DESCRIPTION}</td>
+										<td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${var.DOWNLOAD_URL}</td>
 										<td>${var.LAN_URL}</td>
 										<td>${var.FILE_NAME}</td>
 										

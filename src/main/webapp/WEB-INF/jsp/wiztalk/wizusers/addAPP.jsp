@@ -8,41 +8,36 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+	
 		<base href="<%=basePath%>">
 		<meta charset="utf-8" />
-		<title></title>
+		<title>添加应用</title>
 		<meta name="description" content="overview & stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link href="static/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="static/css/bootstrap-responsive.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="static/css/font-awesome.min.css" />
 		<!-- 下拉框 -->
 		<link rel="stylesheet" href="static/css/chosen.css" />
 		
-		<link rel="stylesheet" href="static/css/ace.min.css" />
-		<link rel="stylesheet" href="static/css/ace-responsive.min.css" />
-		<link rel="stylesheet" href="static/css/ace-skins.min.css" />
-		
-		<link rel="stylesheet" href="static/css/datepicker.css" /><!-- 日期框 -->
+	
 		<script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
 		<script type="text/javascript" src="static/js/jquery.tips.js"></script>
-		
+	
 <script type="text/javascript">
 	
 	
 	//保存
 	function save(){
 	
-		if($("#TYPE").val()==""){
-			$("#TYPE").tips({
+	 	if($("#rent_id").val()==""){
+			$("#rent_id").tips({
 				side:3,
-	            msg:'请输入类型',
+	            msg:'请选择应用！',
 	            bg:'#AE81FF',
 	            time:2
 	        });
-			$("#TYPE").focus();
+			$("#rent_id").focus();
 			return false;
-		}
+		} 
 	
 		$("#Form").submit();
 		$("#zhongxin").hide();
@@ -53,22 +48,22 @@
 	</head>
 <body>
 	<form action="wizusers/saveAppAlow.do" name="Form" id="Form" method="post">
-		<input type="hidden" name="DATA_IDS" id="DATA_IDS" value="${pd.DATA_IDS}"/>
-		<div id="zhongxin">
-		<table id="table_report" class="table table-striped table-bordered table-hover">
-		<%-- 	<tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">用户名:</td>
-				<td><input type="text" name="USERNAME" id="USER_ID" value="${pd.USERNAME}" maxlength="32" readonly="readonly" title="用户名"/></td>
-			</tr> --%>
 		
+		<br>&nbsp;&nbsp;&nbsp;&nbsp; 请选择权限<br><br>
+		&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="type" value="1">内网&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="type" value="2">外网&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="type" value="3" checked="checked">全网
+		
+		<input type="hidden" name="DATA_IDS" id="DATA_IDS" value="${pd.DATA_IDS}"/>
+		<br><br>
+		<div id="zhongxin">
 			
-			<%-- <tr>
-				<td style="width:70px;text-align: right;padding-top: 13px;">绑定状态:</td>
-				<td><input type="text" name="BINDSTATUS" id="BINDSTATUS" value="${pd.BINDSTATUS}" maxlength="32" placeholder="这里输入绑定状态" title="绑定状态"/></td>
-			</tr> --%>
+		
+		<table id="table_report" class="table table-striped table-bordered table-hover">
+		
 			<tr>
-					<td style="width: 70px; text-align: right; padding-top: 13px;"></td>
-					<td><select class="chzn-select" name="APP_ID" id="rent_id"
+					
+					<td style="width: 70px; text-align: left; padding-top: 13px;"><select class="chzn-select" name="APP_ID" id="rent_id"
 						data-placeholder="请选择 APP" style="vertical-align: top;" title="APP">
 							<option value=""></option>
 							<c:forEach items="${rentList}" var="rent">
@@ -78,7 +73,7 @@
 							</c:forEach>
 					</select>
 					</td>
-					
+				
 			</tr>
 			
 			<tr>
