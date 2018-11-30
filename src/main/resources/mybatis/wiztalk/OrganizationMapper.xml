@@ -2,186 +2,212 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="OrganizationMapper">
 	<!-- 列出此角色下的所有用户 -->
-	<select id="listAllUsersByPId"  parameterType="pd" resultType="pd" >
+	<select id="listAllUsersByPId" parameterType="pd" resultType="pd">
 		select id
 		from org_user
-		where 
+		where
 		org_id = #{ORGANIZATION_ID}
 	</select>
-	
+
 	<!-- 通过PID获取TENANT数据 -->
 	<select id="findTenantByPId" parameterType="pd" resultType="pd">
-		select 
-			
-			o.TENANT_ID	AS TENANT_ID,
-			t.NAME AS TENANT_NAME 
-			
-		from 
-			org o LEFT JOIN tenant t ON o.TENANT_ID = t.id
-		where 
-			o.id = #{PARENT_ID}
+		select
+
+		o.TENANT_ID AS TENANT_ID,
+		t.NAME AS TENANT_NAME
+
+		from
+		org o LEFT JOIN tenant t ON o.TENANT_ID = t.id
+		where
+		o.id = #{PARENT_ID}
 	</select>
-	
-	
+
+
 	<!-- 通过user_id获取数据 -->
 	<select id="findByUName" parameterType="pd" resultType="pd">
-		select 
-			NAME	
-		from 
-			org 	
-		where 
-			NAME = #{NAME}
+		select
+		NAME
+		from
+		org
+		where
+		NAME = #{NAME}
 	</select>
-	
-	<!-- 新增-->
+
+	<!-- 新增 -->
 	<insert id="save" parameterType="pd">
 		insert into org(
-			NAME,	
-			SHORT_NAME,	
-			PARENT_ID,	
-			LOCATION,	
-			TENANT_ID,	
-			SORT,	
-			id
+		NAME,
+		SHORT_NAME,
+		PARENT_ID,
+		LOCATION,
+		TENANT_ID,
+		SORT,
+		id
 		) values (
-			#{ORG_NAME},	
-			#{SHORT_NAME},	
-			#{PARENT_ID},	
-			#{LOCATION},	
-			#{TENANT_ID},	
-			#{SORT},	
-			#{ORGANIZATION_ID}
+		#{ORG_NAME},
+		#{SHORT_NAME},
+		#{PARENT_ID},
+		#{LOCATION},
+		#{TENANT_ID},
+		#{SORT},
+		#{ORGANIZATION_ID}
 		)
 	</insert>
-	
-	
-	<!-- 删除-->
+
+
+	<!-- 删除 -->
 	<delete id="delete" parameterType="pd">
 		delete from org
-		where 
-			id = #{ORGANIZATION_ID}
+		where
+		id = #{ORGANIZATION_ID}
 	</delete>
-	
-	
+
+
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
-		update  org
-			set 
-				NAME = #{ORG_NAME},
-				SHORT_NAME = #{SHORT_NAME},
-				PARENT_ID = #{PARENT_ID},
-				LOCATION = #{LOCATION},
-				TENANT_ID = #{TENANT_ID},
-				SORT = #{SORT},
-			id = id 
-			where 
-				id = #{ORGANIZATION_ID}
+		update org
+		set
+		NAME = #{ORG_NAME},
+		SHORT_NAME = #{SHORT_NAME},
+		PARENT_ID = #{PARENT_ID},
+		LOCATION = #{LOCATION},
+		TENANT_ID = #{TENANT_ID},
+		SORT = #{SORT},
+		id = id
+		where
+		id = #{ORGANIZATION_ID}
 	</update>
-	
-	
+
+
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
-			NAME as ORG_NAME,	
-			SHORT_NAME,	
-			PARENT_ID,	
-			LOCATION,	
-			TENANT_ID,	
-			SORT,	
-			id AS ORGANIZATION_ID 
-		from 
-			org
-		where 
-			id = #{ORGANIZATION_ID}
+		select
+		NAME as ORG_NAME,
+		SHORT_NAME,
+		PARENT_ID,
+		LOCATION,
+		TENANT_ID,
+		SORT,
+		id AS ORGANIZATION_ID
+		from
+		org
+		where
+		id = #{ORGANIZATION_ID}
 	</select>
-	
-	
+
+
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-				a.NAME as ORG_NAME,	
-				a.SHORT_NAME,	
-				a.PARENT_ID,	
-				a.LOCATION,	
-				a.TENANT_ID,	
-				a.SORT,	
-				a.id AS ORGANIZATION_ID 
-		from 
-				org a
+		a.NAME as ORG_NAME,
+		a.SHORT_NAME,
+		a.PARENT_ID,
+		a.LOCATION,
+		a.TENANT_ID,
+		a.SORT,
+		a.id AS ORGANIZATION_ID
+		from
+		org a
 	</select>
-	
-	
-		<!-- ORG列表(用户组) -->
+
+
+	<!-- ORG列表(用户组) -->
 	<select id="orgRentlistPage" parameterType="page" resultType="pd">
-		SELECT 
-				a.NAME as ORG_NAME,	
-				a.SHORT_NAME,	
-				a.PARENT_ID,
-				b.NAME AS PARENT_NAME,	
-				a.LOCATION,
-				a.SORT,	
-				a.id AS ORGANIZATION_ID,
-				r.ID AS TENANT_ID ,
-				r.NAME AS TENANT_NAME  
-		FROM org a LEFT JOIN org b ON a.parent_id=b.id, tenant r  
-		WHERE a.TENANT_ID = r.ID 
-		and 1 = 1 
+		SELECT
+		a.NAME as ORG_NAME,
+		a.SHORT_NAME,
+		a.PARENT_ID,
+		b.NAME AS PARENT_NAME,
+		a.LOCATION,
+		a.SORT,
+		a.id AS ORGANIZATION_ID,
+		r.ID AS TENANT_ID ,
+		r.NAME AS TENANT_NAME
+		FROM org a LEFT JOIN org b ON a.parent_id=b.id, tenant r
+		WHERE a.TENANT_ID = r.ID
+		and 1 = 1
 
 		<if test="pd.ORG_NAME != null and pd.ORG_NAME != ''"><!-- 关键词检索 -->
 			and
-				(
-					 a.NAME LIKE CONCAT(CONCAT('%', #{pd.ORG_NAME}),'%')
-					
-				)
+			(
+			a.NAME LIKE CONCAT(CONCAT('%', #{pd.ORG_NAME}),'%')
+
+			)
 		</if>
 		<if test="pd.TENANT_ID != null and pd.TENANT_ID != ''"><!-- 租户检索 -->
-			and a.TENANT_ID=#{pd.TENANT_ID} 
+			and a.TENANT_ID=#{pd.TENANT_ID}
 		</if>
 
-		<if test="pd.PARENT_ID != null" >  <!-- 通过父类检索 -->
-			and a.PARENT_ID=#{pd.PARENT_ID} 
+		<if test="pd.PARENT_ID != null">  <!-- 通过父类检索 -->
+			and a.PARENT_ID=#{pd.PARENT_ID}
 		</if>
-				
+
 	</select>
-	
+
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
-				a.NAME as ORG_NAME,	
-				a.SHORT_NAME,	
-				a.PARENT_ID,	
-				a.LOCATION,	
-				a.TENANT_ID,	
-				a.SORT,	
-				a.id AS ORGANIZATION_ID 
-		from 
-				org a
-				
-				<if test="TENANT_ID != null and TENANT_ID != '' " >  <!-- 通过父类检索 -->
-					where a.TENANT_ID=#{TENANT_ID} 
-				</if>
-				
-				
-				
+		a.NAME as ORG_NAME,
+		a.SHORT_NAME,
+		a.PARENT_ID,
+		a.LOCATION,
+		a.TENANT_ID,
+		a.SORT,
+		a.id AS ORGANIZATION_ID
+		from
+		org a
+
+		<if test="TENANT_ID != null and TENANT_ID != '' ">  <!-- 通过父类检索 -->
+			where a.TENANT_ID=#{TENANT_ID}
+		</if>
+
+
+
 	</select>
-	
+
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from org
-		where 
-			id in
-		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-                 #{item}
+		where
+		id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
 		</foreach>
 	</delete>
-	
-	
+
+
 	<select id="checkParent" parameterType="String" resultType="pd">
 		select
-				
-				a.id 
-		from 
-				org a where a.parent_id=#{id}
+
+		a.id
+		from
+		org a where a.parent_id=#{id}
 	</select>
+
+	<!-- 批量新增 <insert id="batchInsertOrg"> insert into org( NAME, PARENT_ID, 
+		TENANT_ID, id ) values <foreach item="item" index="index" collection="list" 
+		separator=","> (#{item.ORG_NAME},#{item.PARENT_ID},#{item.TENANT_ID},#{item.ORGANIZATION_ID}) 
+		</foreach> </insert> -->
+
+
+	<update id="bathUpate" parameterType="java.util.List">
+		update org set name=
+		<foreach collection="list" item="item" index="index"
+			separator=" " open="case ID" close="end"> when #{item.ORGANIZATION_ID,jdbcType=VARCHAR}
+			then #{item.ORG_NAME,jdbcType=VARCHAR}	  </foreach>
+		,TENANT_ID=
+		<foreach collection="list" item="item" index="index"
+			separator=" " open="case ID" close="end"> when #{item.ORGANIZATION_ID,jdbcType=VARCHAR}
+			then #{item.TENANT_ID,jdbcType=VARCHAR}	  </foreach>
+		,PARENT_ID=
+		<foreach collection="list" item="item" index="index"
+			separator=" " open="case ID" close="end"> when #{item.ORGANIZATION_ID,jdbcType=VARCHAR}
+			then #{item.PARENT_ID,jdbcType=VARCHAR}	  </foreach>
 	
+		where ID in
+		<foreach collection="list" index="index" item="item"
+			separator="," open="(" close=")"> #{item.ORGANIZATION_ID,jdbcType=VARCHAR}	  </foreach>
+	</update>
+
 </mapper>

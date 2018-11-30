@@ -28,7 +28,7 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="NAME" value="" placeholder="这里输入关键词" />
+							<input autocomplete="off" id="nav-search-input" type="text" name="NAME" value="${pd.NAME }" placeholder="这里输入关键词" />
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
@@ -36,8 +36,8 @@
 					<td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
  --%>					<td style="vertical-align:top;"> 
 					 	<select class="chzn-select" name="BINDSTATUS" id="field2" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-							<option value=""></option>
-							<option value="">全部</option>
+							<option value="${pd.BINDSTATUS }"></option>
+							<option value="${pd.BINDSTATUS }">全部</option>
 							<option value="1">绑定</option>
 							<option value="-1">未绑定</option>
 					  	</select>

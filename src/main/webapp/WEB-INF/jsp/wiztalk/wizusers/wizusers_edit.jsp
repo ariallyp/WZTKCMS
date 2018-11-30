@@ -106,8 +106,11 @@
 		/* $("#Form").submit();
 		$("#zhongxin").hide();
 		$("#zhongxin2").show();
+		
 		 */
+		
 		if($("#WIZUSERS_ID").val()==""){
+			
 			hasU();
 		}else{
 			$("#Form").submit();
@@ -155,18 +158,6 @@
 		<div id="zhongxin">
 			<table id="table_report"
 				class="table table-striped table-bordered table-hover">
-				<%-- <tr>
-					<td style="width: 70px; text-align: right; padding-top: 13px;">租户:</td>
-					<td><select class="chzn-select" name="TENANT_ID" id="rent_id" 
-					data-placeholder="请选择租户" style="vertical-align: top;" title="租户">
-										<option value=""></option>
-										<c:forEach items="${rentList}" var="rent">
-											<option value="${rent.TENANT_ID }"
-												<c:if test="${pd.TENANT_ID==rent.TENANT_ID}">selected</c:if>>${rent.TENANT_NAME }</option>
-										</c:forEach>
-								</select></td>
-				</tr>
-				--%>
 				
 				<input type="hidden" name="AVATAR" id="AVATAR" value="${pd.AVATAR}" />
 				<input type="hidden" name="NAME_PY" id="NAME_PY" value="${pd.NAME_PY}" />
@@ -174,14 +165,14 @@
 				<input type="hidden" name="STATUS" id="STATUS" value="${pd.STATUS}" />
 				<input type="hidden" name="RAND" id="RAND" value="${pd.RAND}" />
 				<input type="hidden" name="LEVEL" id="LEVEL" value="${pd.LEVEL}" />
+				<input type="hidden" name="TENANT_ID" id="TENANT_ID" value="${pd.TENANT_ID}" />
+		
 				<tr>
 					<td style="width: 70px; text-align: right; padding-top: 13px;">租户:</td>
 					<td><input type="text" name="TENANT_NAME" id="TENANT_NAME"
-						value="${pd.TENANT_NAME}" maxlength="32" readonly="readonly" title="租户" />
-						<input type="hidden" name="TENANT_ID" id="TENANT_ID" value="${pd.TENANT_ID}" />
-					</td>
+						value="${pd.TENANT_NAME}" maxlength="32"  readonly="readonly"   title="租户" /></td>
 				</tr>
-				
+			<c:if test="${!empty pd.ORG_ID }">	
 				<tr>
 					<td style="width: 70px; text-align: right; padding-top: 13px;">机构:</td>
 					<td><select class="chzn-select" name="ORG_ID" id="org_id"
@@ -195,8 +186,7 @@
 							</c:forEach>
 					</select></td>
 				</tr> 
-				
-				
+			</c:if>							
 				
 				<tr>
 					<td style="width: 70px; text-align: right; padding-top: 13px;">账号:</td>

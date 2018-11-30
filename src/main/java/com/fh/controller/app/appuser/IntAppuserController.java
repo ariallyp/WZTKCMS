@@ -2,17 +2,23 @@ package com.fh.controller.app.appuser;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.service.system.appuser.AppuserService;
 import com.fh.util.AppUtil;
+import com.fh.util.Const;
 import com.fh.util.PageData;
+import com.fh.util.StringUtil;
 import com.fh.util.Tools;
 
 
@@ -33,6 +39,9 @@ public class IntAppuserController extends BaseController {
     
 	@Resource(name="appuserService")
 	private AppuserService appuserService;
+	
+	@Value("${server.code}")  
+	private String serverCode; 
 	
 	/**
 	 * 根据用户名获取会员信息
@@ -70,8 +79,60 @@ public class IntAppuserController extends BaseController {
 		return AppUtil.returnObject(new PageData(), map);
 	}
 	
+	@RequestMapping(value="/getCode")
+	@ResponseBody
+	public ModelAndView getCode(){
+		logBefore(logger, "根据用户名获取授权码");
+		ModelAndView mv = this.getModelAndView();
+		Map<String,Object> map = new HashMap<String,Object>();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		mv.setViewName("wiztalk/client/code");
+		String code = "";
+		String name =pd.getString("name");
+		
+		if (!StringUtils.isEmpty(name)) {
+			code=this.EncoderData(serverCode);
+			mv.addObject("code",code);
+			return mv;
+		}else {
+			return mv;
+		}
+		
+		
+		
+	}
+	
+	private static String EncoderData(String code) {
+		String v=code;
+		Random r=new Random(System.currentTimeMillis()); 
+		  int index=r.nextInt(2);
+		  String[] dataList=new String[3];
+		  for(int i=0;i<2;i++) {
+			  if(index==i) {
+				  dataList[i]=v;
+
+			  }
+			  else {
+				  dataList[i]=r.nextInt(90)+10+"";
+
+			  }
+		  }
+		  dataList[2]="0"+index;
+		  String value="";
+		  for(int i=0;i<dataList.length;i++) {
+			  value+=dataList[i];
+		  }
+		  return value;
+	}
 
 	
+	public static void main(String[] args) {
+		//String  aa = IntAppuserController.EncoderData("01");
+		Random r=new Random(System.currentTimeMillis()); 
+		String cc =r.nextInt(100)+"";
+		System.err.println(cc);
+	}
 }
 	
  

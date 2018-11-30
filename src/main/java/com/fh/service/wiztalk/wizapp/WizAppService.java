@@ -46,6 +46,13 @@ public class WizAppService {
 	}
 	
 	/*
+	*列表 my app
+	*/
+	public List<PageData> listMyApp(Page page)throws Exception{
+		return (List<PageData>)dao.findForList("WizAppMapper.listMyApp", page);
+	}
+	
+	/*
 	*列表(全部)
 	*/
 	public List<PageData> listAll(PageData pd)throws Exception{

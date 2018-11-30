@@ -28,12 +28,10 @@
 				<tr>
 					<td>
 						<span class="input-icon">
-							<input autocomplete="off" id="nav-search-input" type="text" name="NAME" value="" placeholder="这里输入关键词" />
+							<input autocomplete="off" id="nav-search-input" type="text" name="NAME" value="${pd.NAME }" placeholder="这里输入关键词" />
 							<i id="nav-search-icon" class="icon-search"></i>
 						</span>
 					</td>
-					<td><input class="span10 date-picker" name="lastLoginStart" id="lastLoginStart" value="${pd.lastLoginStart}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期"/></td>
-					<td><input class="span10 date-picker" name="lastLoginEnd" id="lastLoginEnd" value="${pd.lastLoginEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期"/></td>
 					<td style="vertical-align:top;"> 
 					 	<select class="chzn-select" name="TENANT_ID" id="rent_id" data-placeholder="请选择租户" style="vertical-align:top;width: 120px;" >
 						<option value=""></option>
@@ -68,6 +66,9 @@
 						<th class="center">类型</th>
 						<!--<th class="center">命名</th>
 						<th class="center">全名</th> -->
+						<th class="center">命名</th>
+						<!--<th class="center">全名</th> -->
+						<th class="center">状态</th>
 						<th class="center">描述</th>
 						<th class="center">操作</th>
 					</tr>
@@ -89,6 +90,16 @@
 										<td>${var.TENANT_NAME}</td>
 										<td>${var.TOKEN}</td>
 										<td>${var.TYPE}</td>
+										<td>${var.NAME_PY}</td>
+										<c:if test="${var.STATUS == 0 }">
+										<td>上架</td>
+										</c:if>
+										<c:if test="${var.STATUS == 1 }">
+										<td>下架</td>
+										</c:if>
+										<c:if test="${var.STATUS == 2 }">
+										<td>审核中</td>
+										</c:if>
 										<td>${var.DESCRIPTION}</td>
 								<td style="width: 30px;" class="center">
 									<div class='hidden-phone visible-desktop btn-group'>

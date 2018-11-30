@@ -17,8 +17,9 @@ public class SynUser extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext context)
 			throws JobExecutionException {
 		try {
+			SyncDbService syncDbService = new SyncDbService();
 			WebApplicationContext context1 = ContextLoader.getCurrentWebApplicationContext();
-			SyncDbService syncDbService = (SyncDbService) context1.getBean("syncDbService");
+			 syncDbService = (SyncDbService) context1.getBean("syncDbService");
 			String type="自动";
 			syncDbService.syncdbResult(type);
 		} catch (Exception e) {

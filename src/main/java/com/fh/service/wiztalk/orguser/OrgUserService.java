@@ -79,5 +79,12 @@ public class OrgUserService {
 		dao.delete("OrgUserMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/*
+	* 通过uid,orgID获取数据
+	*/
+	public List<PageData> findByOrgIDAndUid(PageData pd)throws Exception{
+		return  (List<PageData>)dao.findForList("OrgUserMapper.findByOrgIDAndUid", pd);
+	}
+	
 }
 

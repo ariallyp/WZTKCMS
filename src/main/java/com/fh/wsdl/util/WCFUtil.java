@@ -2,8 +2,7 @@ package com.fh.wsdl.util;
 
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
+
 import com.fh.wsdl.entity.SeOrganization;
 import com.fh.wsdl.entity.SeUser;
 import com.fh.wsdl.entity.SeUserOrganization;
@@ -14,20 +13,19 @@ import com.fh.wsdl.wcf.ObjectFactory;
 import com.fh.wsdl.wcf.WcfApplicationService;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-public class WCFUtil {
+public class WCFUtil {/*
 
 	
 	private static final ObjectMapper MAPPER=new ObjectMapper();
 	
-	/**
+	*//**
 	 * 获取wcf接口中SeOrganization表中的数据
 	 * @return List<SeOrganization>
 	 * @throws Exception 
 	 * @throws JsonParseException 
-	 */
+	 *//*
 	public static List<SeOrganization>getSeOrganizations(String appId,String methodName) throws  Exception{
 		ObjectFactory objectFactory=new ObjectFactory();
 		WcfApplicationService wcfApplicationService=new WcfApplicationService();
@@ -47,12 +45,12 @@ public class WCFUtil {
 		return seOrganizations;
 	}
 	
-	/**
+	*//**
 	 * 获取wcf接口中SeUser表中的数据
 	 * @return List<SeUser>
 	 * @throws Exception 
 	 * @throws JsonParseException 
-	 */
+	 *//*
 	public static List<SeUser>getSeUers(String appId,String methodName) throws Exception{
 		ObjectFactory objectFactory=new ObjectFactory();
 		WcfApplicationService wcfApplicationService=new WcfApplicationService();
@@ -72,12 +70,12 @@ public class WCFUtil {
 		return seUsers;
 	}
 	
-	/**
+	*//**
 	 * 获取wcf接口中SeUserOrganization表中的数据
 	 * @return List<SeUserOrganization>
 	 * @throws Exception 
 	 * @throws JsonParseException 
-	 */
+	 *//*
 	public static List<SeUserOrganization>getSeUserOrganizations(String appId,String methodName) throws  Exception{
 		ObjectFactory objectFactory=new ObjectFactory();
 		WcfApplicationService wcfApplicationService=new WcfApplicationService();
@@ -97,4 +95,4 @@ public class WCFUtil {
 		return seUserOrganizations;
 	}
 	
-}
+*/}

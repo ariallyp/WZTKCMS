@@ -1,351 +1,372 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="WizUsersMapper">
-	<!-- 为user添加应用-->
+	<!-- 为user添加应用 -->
 	<insert id="saveUserApp" parameterType="pd">
-		insert into app_user_allow(
-			uid,	
-			appId,
-			type,	
-			ID
+		insert into
+		app_user_allow(
+		uid,
+		appId,
+		type,
+		ID
 		) values (
-			#{UID},	
-			#{APPID},
-			#{TYPE},	
-			#{ID}
+		#{UID},
+		#{APPID},
+		#{TYPE},
+		#{ID}
 		)
 	</insert>
-	
+
 	<!-- 查找应用是否添加通过用户名和ID -->
 	<select id="findByUserApp" parameterType="pd" resultType="pd">
-		select 
-			id
-		from 
-			app_user_allow 
-		where 
-			uid = #{UID}
-			and appId = #{APPID} 
-		
+		select
+		id
+		from
+		app_user_allow
+		where
+		uid = #{UID}
+		and appId = #{APPID}
+
 	</select>
-	
-	<!-- 新增-->
+
+	<!-- 新增 -->
 	<insert id="save" parameterType="pd">
 		insert into user(
-			NAME,	
-			NICKNAME,	
-			AVATAR,	
-			NAME_PY,	
-			NAME_QUANPIN,	
-			STATUS,	
-			RAND,	
-			PASSWORD,	
-			TENANT_ID,	
-			LEVEL,	
-			EMAIL,	
-			MOBILE,	
-			TEL,	
-			AREA,	
-			CREATED,	
-			UPDATED,	
-			ID
+		NAME,
+		NICKNAME,
+		AVATAR,
+		NAME_PY,
+		NAME_QUANPIN,
+		STATUS,
+		RAND,
+		PASSWORD,
+		TENANT_ID,
+		LEVEL,
+		EMAIL,
+		MOBILE,
+		TEL,
+		AREA,
+		CREATED,
+		UPDATED,
+		ID
 		) values (
-			#{NAME},	
-			#{NICKNAME},	
-			#{AVATAR},	
-			#{NAME_PY},	
-			#{NAME_QUANPIN},	
-			#{STATUS},	
-			#{RAND},	
-			#{PASSWORD},	
-			#{TENANT_ID},	
-			#{LEVEL},	
-			#{EMAIL},	
-			#{MOBILE},	
-			#{TEL},	
-			#{AREA},	
-			#{CREATED},	
-			#{UPDATED},	
-			#{WIZUSERS_ID}
+		#{NAME},
+		#{NICKNAME},
+		#{AVATAR},
+		#{NAME_PY},
+		#{NAME_QUANPIN},
+		#{STATUS},
+		#{RAND},
+		#{PASSWORD},
+		#{TENANT_ID},
+		#{LEVEL},
+		#{EMAIL},
+		#{MOBILE},
+		#{TEL},
+		#{AREA},
+		#{CREATED},
+		#{UPDATED},
+		#{WIZUSERS_ID}
 		)
 	</insert>
-	
-	
-	<!-- 删除-->
+
+
+	<!-- 删除 -->
 	<delete id="delete" parameterType="pd">
 		delete from user
-		where 
-			ID = #{WIZUSERS_ID}
+		where
+		ID = #{WIZUSERS_ID}
 	</delete>
-	
-	
+
+
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
-		update  user
-			set 
-				NAME = #{NAME},
-				NICKNAME = #{NICKNAME},
-				AVATAR = #{AVATAR},
-				NAME_PY = #{NAME_PY},
-				NAME_QUANPIN = #{NAME_QUANPIN},
-				STATUS = #{STATUS},
-				RAND = #{RAND},
-				PASSWORD = #{PASSWORD},
-				TENANT_ID = #{TENANT_ID},
-				LEVEL = #{LEVEL},
-				EMAIL = #{EMAIL},
-				MOBILE = #{MOBILE},
-				TEL = #{TEL},
-				AREA = #{AREA},
-				UPDATED = #{UPDATED},
-			ID = ID 
-			where 
-				ID = #{WIZUSERS_ID}
+		update user
+		set
+		NAME = #{NAME},
+		NICKNAME = #{NICKNAME},
+		AVATAR = #{AVATAR},
+		NAME_PY = #{NAME_PY},
+		NAME_QUANPIN = #{NAME_QUANPIN},
+		STATUS = #{STATUS},
+		RAND = #{RAND},
+		PASSWORD = #{PASSWORD},
+		TENANT_ID = #{TENANT_ID},
+		LEVEL = #{LEVEL},
+		EMAIL = #{EMAIL},
+		MOBILE = #{MOBILE},
+		TEL = #{TEL},
+		AREA = #{AREA},
+		UPDATED = #{UPDATED},
+		ID = ID
+		where
+		ID = #{WIZUSERS_ID}
 	</update>
-	
-	
+
+
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
-			NAME,	
-			NICKNAME,	
-			AVATAR,	
-			NAME_PY,	
-			NAME_QUANPIN,	
-			STATUS,	
-			RAND,	
-			PASSWORD,	
-			TENANT_ID,	
-			LEVEL,	
-			EMAIL,	
-			MOBILE,	
-			TEL,	
-			AREA,	
-			CREATED,	
-			UPDATED,	
-			ID AS WIZUSERS_ID
-		from 
-			user
-		where 
-			ID = #{WIZUSERS_ID}
+		select
+		NAME,
+		NICKNAME,
+		AVATAR,
+		NAME_PY,
+		NAME_QUANPIN,
+		STATUS,
+		RAND,
+		PASSWORD,
+		TENANT_ID,
+		LEVEL,
+		EMAIL,
+		MOBILE,
+		TEL,
+		AREA,
+		CREATED,
+		UPDATED,
+		ID AS WIZUSERS_ID
+		from
+		user
+		where
+		ID = #{WIZUSERS_ID}
 	</select>
-	
-		<!-- 通过user_id获取数据 -->
-	<select id="findByUName" parameterType="pd" resultType="pd">
-		select 
-			NAME,	
-			NICKNAME,	
-			AVATAR,	
-			NAME_PY	
-		from 
-			user 	
-		where 
-			NAME = #{NAME}
+
+	<!-- 通过user_id获取数据 -->
+	<select id="findByUName" parameterType="pd" resultType="com.fh.util.PageData">
+		select
+		NAME,
+		NICKNAME,
+		AVATAR,
+		NAME_PY
+		from
+		user
+		where
+		NAME = #{NAME}
 	</select>
-	
+
 	<!-- 通过邮箱获取数据 -->
-	<select id="findByUE" parameterType="pd" resultType="pd">
-		select 
-			NAME,	
-			NICKNAME,	
-			AVATAR,	
-			NAME_PY	
-		from 
-			user 
-		where 
-			EMAIL = #{EMAIL}
+	<select id="findByUE" parameterType="pd" resultType="com.fh.util.PageData">
+		select
+		NAME,
+		NICKNAME,
+		AVATAR,
+		NAME_PY
+		from
+		user
+		where
+		EMAIL = #{EMAIL}
 		<if test="NAME != null and NAME != ''">
-			and NAME != #{NAME} 
+			and NAME != #{NAME}
 		</if>
 	</select>
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+	<select id="findByUNameID" parameterType="pd" resultType="com.fh.util.PageData">
+		select
+		NAME,
+		NICKNAME,
+		AVATAR,
+		NAME_PY
+		from
+		user
+		where
+		1=1 and
+		NAME = #{NAME} and 
+		ID = #{WIZUSERS_ID} 
+	</select>
+
+
+
+
+
+
+
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-				a.NAME,	
-				a.NICKNAME,	
-				a.AVATAR,	
-				a.NAME_PY,	
-				a.NAME_QUANPIN,	
-				a.STATUS,	
-				a.RAND,	
-				a.PASSWORD,	
-				a.LEVEL,	
-				a.EMAIL,	
-				a.MOBILE,	
-				a.TEL,	
-				a.AREA,	
-				a.CREATED,	
-				a.UPDATED,	
-				a.ID AS WIZUSERS_ID,
-				t.ID AS TENANT_ID,
-				t.NAME AS TENANT_NAME 
-		from 
-				user a ,tenant t where a.TENANT_ID= t.ID
+		a.NAME,
+		a.NICKNAME,
+		a.AVATAR,
+		a.NAME_PY,
+		a.NAME_QUANPIN,
+		a.STATUS,
+		a.RAND,
+		a.PASSWORD,
+		a.LEVEL,
+		a.EMAIL,
+		a.MOBILE,
+		a.TEL,
+		a.AREA,
+		a.CREATED,
+		a.UPDATED,
+		a.ID AS WIZUSERS_ID,
+		t.ID AS TENANT_ID,
+		t.NAME AS TENANT_NAME
+		from
+		user a ,tenant t where a.TENANT_ID= t.ID
 	</select>
-	
+
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
-				a.NAME,	
-				a.NICKNAME,	
-				a.AVATAR,	
-				a.NAME_PY,	
-				a.NAME_QUANPIN,	
-				a.STATUS,	
-				a.RAND,	
-				a.PASSWORD,	
-				a.TENANT_ID,	
-				a.LEVEL,	
-				a.EMAIL,	
-				a.MOBILE,	
-				a.TEL,	
-				a.AREA,	
-				a.CREATED,	
-				a.UPDATED,	
-				a.ID AS WIZUSERS_ID 
-		from 
-				user a
+		a.NAME,
+		a.NICKNAME,
+		a.AVATAR,
+		a.NAME_PY,
+		a.NAME_QUANPIN,
+		a.STATUS,
+		a.RAND,
+		a.PASSWORD,
+		a.TENANT_ID,
+		a.LEVEL,
+		a.EMAIL,
+		a.MOBILE,
+		a.TEL,
+		a.AREA,
+		a.CREATED,
+		a.UPDATED,
+		a.ID AS WIZUSERS_ID
+		from
+		user a
 	</select>
-	
+
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from user
-		where 
-			ID in
-		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-                 #{item}
+		where
+		ID in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
 		</foreach>
 	</delete>
-	
+
 	<!-- 列表 -->
-	<select id="datalistPageByOrgUser" parameterType="page" resultType="pd">
+	<select id="datalistPageByOrgUser" parameterType="page"
+		resultType="pd">
 		select
-				a.NAME,	
-				a.NICKNAME,	
-				a.AVATAR,	
-				a.NAME_PY,	
-				a.NAME_QUANPIN,	
-				a.STATUS,	
-				a.RAND,	
-				a.PASSWORD,	
-				a.LEVEL,	
-				a.EMAIL,	
-				a.MOBILE,	
-				a.TEL,	
-				a.AREA,	
-				a.CREATED,	
-				a.UPDATED,
-				o.NAME AS ORG_NAME,	
-				a.ID AS WIZUSERS_ID,
-				t.ID AS TENANT_ID,
-				t.NAME AS TENANT_NAME 
-		from 
-				user a ,tenant t,org_user g left join org o on g.org_id=o.id  where a.TENANT_ID= t.ID and a.id=g.user_id 
-				
+		a.NAME,
+		a.NICKNAME,
+		a.AVATAR,
+		a.NAME_PY,
+		a.NAME_QUANPIN,
+		a.STATUS,
+		a.RAND,
+		a.PASSWORD,
+		a.LEVEL,
+		a.EMAIL,
+		a.MOBILE,
+		a.TEL,
+		a.AREA,
+		a.CREATED,
+		a.UPDATED,
+		o.NAME AS ORG_NAME,
+		a.ID AS WIZUSERS_ID,
+		t.ID AS TENANT_ID,
+		t.NAME AS TENANT_NAME
+		from
+		user a ,tenant t,org_user g left join org o on g.org_id=o.id where
+		a.TENANT_ID= t.ID and a.id=g.user_id
+
 		<if test="pd.ORG_ID != null and pd.ORG_ID != ''"><!-- 租户检索 -->
-			and g.org_id=#{pd.ORG_ID} 
-		</if>		
+			and g.org_id=#{pd.ORG_ID}
+		</if>
 		<if test="pd.NAME != null and pd.NAME != ''"><!-- 关键词检索 -->
 			and
-				(
-					 a.NAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					 or
-					 a.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					 or
-					 a.NAME_QUANPIN LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					 or
-					 a.EMAIL LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					 or
-					 a.NAME_PY LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					
-				)
+			(
+			a.NAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+			or
+			a.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+			or
+			a.NAME_QUANPIN LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+			or
+			a.EMAIL LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+			or
+			a.NAME_PY LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+
+			)
 		</if>
-		
+
 		<if test="pd.TENANT_ID != null and pd.TENANT_ID != ''"><!-- 租户检索 -->
-			and a.TENANT_ID=#{pd.TENANT_ID} 
+			and a.TENANT_ID=#{pd.TENANT_ID}
 		</if>
-		
+
 		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
 			and a.CREATED &gt;= #{pd.lastLoginStart}
 		</if>
-		
+
 		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
 			and a.UPDATED &lt;= #{pd.lastLoginEnd}
 		</if>
-		
+
 	</select>
-	
-	
+
+
 	<!-- 列表 -->
-	<select id="datalistPageByOrgUserAndApp" parameterType="page" resultType="pd">
-	SELECT
-				a.NAME,	
-				a.NICKNAME,
-				n.name AS APP_NAME,
-					
-				a.AVATAR,	
-				a.NAME_PY,	
-				a.NAME_QUANPIN,	
-				a.STATUS,	
-				a.RAND,	
-				a.PASSWORD,	
-				a.LEVEL,	
-				a.EMAIL,	
-				a.MOBILE,	
-				a.TEL,	
-				a.AREA,	
-				a.CREATED,	
-				a.UPDATED,	
-				a.ID AS WIZUSERS_ID,
-				t.ID AS TENANT_ID,
-				t.NAME AS TENANT_NAME
-				
-		FROM 
-				user a JOIN app_user p ON a.id=p.uid JOIN application n  ON p.appId=n.id,tenant t,org_user g WHERE a.TENANT_ID= t.ID AND a.id=g.user_id
-				
+	<select id="datalistPageByOrgUserAndApp" parameterType="page"
+		resultType="pd">
+		SELECT
+		a.NAME,
+		a.NICKNAME,
+		n.name AS APP_NAME,
+
+		a.AVATAR,
+		a.NAME_PY,
+		a.NAME_QUANPIN,
+		a.STATUS,
+		a.RAND,
+		a.PASSWORD,
+		a.LEVEL,
+		a.EMAIL,
+		a.MOBILE,
+		a.TEL,
+		a.AREA,
+		a.CREATED,
+		a.UPDATED,
+		a.ID AS WIZUSERS_ID,
+		t.ID AS TENANT_ID,
+		t.NAME AS TENANT_NAME
+
+		FROM
+		user a JOIN app_user p ON a.id=p.uid JOIN application n ON
+		p.appId=n.id,tenant t,org_user g WHERE a.TENANT_ID= t.ID AND
+		a.id=g.user_id
+
 		<if test="pd.ORG_ID != null and pd.ORG_ID != ''"><!-- 租户检索 -->
-			and g.org_id=#{pd.ORG_ID} 
-		</if>		
+			and g.org_id=#{pd.ORG_ID}
+		</if>
 		<if test="pd.NAME != null and pd.NAME != ''"><!-- 关键词检索 -->
 			and
-				(
-					 a.NAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					 or
-					 a.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					 or
-					 a.NAME_QUANPIN LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					 or
-					 a.EMAIL LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					 or
-					 a.NAME_PY LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
-					
-				)
-				
+			(
+			a.NAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+			or
+			a.NICKNAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+			or
+			a.NAME_QUANPIN LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+			or
+			a.EMAIL LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+			or
+			a.NAME_PY LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+
+			)
+
 		</if>
-		
+
 		<if test="pd.TENANT_ID != null and pd.TENANT_ID != ''"><!-- 租户检索 -->
-			and a.TENANT_ID=#{pd.TENANT_ID} 
+			and a.TENANT_ID=#{pd.TENANT_ID}
 		</if>
-		
+
 		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
 			and a.CREATED &gt;= #{pd.lastLoginStart}
 		</if>
-		
+
 		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
 			and a.UPDATED &lt;= #{pd.lastLoginEnd}
 		</if>
-				
+
 	</select>
-	
-	
-	
-	
-	
+
+
+
+
+
 </mapper>

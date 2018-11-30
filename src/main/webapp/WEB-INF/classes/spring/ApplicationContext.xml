@@ -170,5 +170,6 @@
         <property name="redisDataSource" ref="redisDataSource"></property>    
     </bean>    
 	
+	
    <!-- ================ redis服务器配置 end ================ -->
 </beans>

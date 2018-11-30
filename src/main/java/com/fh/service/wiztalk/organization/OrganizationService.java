@@ -35,6 +35,11 @@ public class OrganizationService {
 		dao.update("OrganizationMapper.edit", pd);
 	}
 	
+	
+	public void bathUpate(List<PageData> list)throws Exception{
+		dao.batchUpdate("OrganizationMapper.bathUpate", list);
+	}
+	
 	/*
 	*列表
 	*/

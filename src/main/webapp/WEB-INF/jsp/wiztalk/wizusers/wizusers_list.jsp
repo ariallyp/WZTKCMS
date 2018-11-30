@@ -4,8 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
 <!DOCTYPE html>
@@ -35,19 +34,10 @@
 							<tr>
 								<td><span class="input-icon"> <input
 										autocomplete="off" id="nav-search-input" type="text"
-										name="NAME" value="" placeholder="这里输入关键词" /> <i
+										name="NAME" value="${pd.NAME }" placeholder="这里输入关键词" /> <i
 										id="nav-search-icon" class="icon-search"></i>
 								</span></td>
-								<%-- <td><input class="span10 date-picker" id="lastLoginStart"
-									name="lastLoginStart" id="lastLoginStart"
-									value="${pd.lastLoginStart}" type="text"
-									data-date-format="yyyy-mm-dd" readonly="readonly"
-									style="width: 88px;" placeholder="开始日期" /></td>
-								<td><input class="span10 date-picker" id="lastLoginEnd"
-									name="lastLoginEnd" id="lastLoginEnd"
-									value="${pd.lastLoginEnd}" type="text"
-									data-date-format="yyyy-mm-dd" readonly="readonly"
-									style="width: 88px;" placeholder="结束日期" /></td> --%>
+						
 								<td style="vertical-align: top;"><select
 									class="chzn-select" name="TENANT_ID" id="rent_id"
 									data-placeholder="请选择租户"
@@ -128,7 +118,7 @@
 																</button>
 																<ul
 																	class="dropdown-menu dropdown-icon-only dropdown-light pull-right dropdown-caret dropdown-close">
-																	<c:if test="${!empty ORG_ID }">
+											
 																		<c:if test="${QX.edit == 1 }">
 																			<li><a style="cursor: pointer;" title="编辑"
 																				onclick="edit('${var.WIZUSERS_ID}');"
@@ -136,7 +126,7 @@
 																				data-placement="left"><span class="green"><i
 																						class="icon-edit"></i></span></a></li>
 																		</c:if>
-																	</c:if>
+																	
 																	<c:if test="${QX.del == 1 }">
 																		<li><a style="cursor: pointer;" title="删除"
 																			onclick="del('${var.WIZUSERS_ID}');"

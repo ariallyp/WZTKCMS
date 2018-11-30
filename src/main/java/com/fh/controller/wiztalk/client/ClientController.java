@@ -8,43 +8,46 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.quartz.CronExpression;
-import org.quartz.CronTrigger;
-import org.quartz.DateIntervalTrigger;
-import org.quartz.DateIntervalTrigger.IntervalUnit;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
+import org.quartz.SimpleTrigger;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.redis.IRedisUtilService;
+import com.fh.service.wiztalk.client.ClientService;
 import com.fh.util.AppUtil;
-import com.fh.util.ObjectExcelView;
 import com.fh.util.Const;
+import com.fh.util.Jurisdiction;
+import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.Tools;
 import com.fh.wsdl.job.SynUser;
 import com.fh.wsdl.service.SyncDbService;
-import com.fh.util.Jurisdiction;
-import com.fh.service.redis.IRedisUtilService;
-import com.fh.service.wiztalk.client.ClientService;
+import static org.quartz.SimpleScheduleBuilder.*;
+
 
 /**
  * 类名称：ClientController 创建人：Arial 创建时间：2017-08-14
@@ -171,7 +174,7 @@ public class ClientController extends BaseController {
 				StringBuffer sbRedis = new StringBuffer();
 				sb.append(SS + " ").append(MM + " ").append(HH + " * * ?");
 				System.out.println(sb.toString());
-				timedb(sb.toString());
+				timedb(sb.toString(),request.getParameter("synp"));
 				sbRedis.append("同步时间 : 每天 ").append(HH+":").append(MM+":").append(SS);
 				redisUtilService.set(WZTK_SYNC_TIME, sbRedis.toString());
 			} else if ("w".equals(request.getParameter("synt"))) {
@@ -186,7 +189,7 @@ public class ClientController extends BaseController {
 				StringBuffer sbRedis = new StringBuffer();
 				sb.append(SS + " ").append(MM + " ").append(HH + " ? *  " + w);
 				System.out.println(sb.toString());
-				timedb(sb.toString());
+				timedb(sb.toString(),request.getParameter("synp"));
 				sbRedis.append("同步时间 : 每周 ").append(w+"  ").append(HH+":").append(MM+":").append(SS);
 				String syncTime=request.getParameter("syncTime2");
 				redisUtilService.set(WZTK_SYNC_TIME, sbRedis.toString());
@@ -203,7 +206,7 @@ public class ClientController extends BaseController {
 				StringBuffer sbRedis = new StringBuffer();
 				sb.append(SS + " ").append(MM + " ").append(HH + " " + mm + " * ?");
 				System.out.println(sb.toString());
-				timedb(sb.toString());
+				timedb(sb.toString(),request.getParameter("synp"));
 				sbRedis.append("同步时间 : 每月 ").append(mm+" 日  ").append(HH+":").append(MM+":").append(SS);
 				redisUtilService.set(WZTK_SYNC_TIME, sbRedis.toString());
 				
@@ -225,13 +228,13 @@ public class ClientController extends BaseController {
 			sb.append("0 */"+j+" * * * ?");
 			sbRedis.append("间隔时间为： ").append(j).append(" 分钟");
 			System.out.println(sb.toString());
-			timedb2(j);
+			timedb(j,request.getParameter("synp"));//采用simpleTrigger
 			redisUtilService.set("SYNC_WZTK_PWD", request.getParameter("SYNC_WZTK_PWD"));
 			redisUtilService.set(WZTK_SYNC_TIME, sbRedis.toString());
 			
 
 		} else {
-			timedb("0 0 0 * * ?");
+			timedb("0 0 0 * * ?","");
 			
 			redisUtilService.set(WZTK_SYNC_TIME, "每天十二点整");
 		}
@@ -239,27 +242,39 @@ public class ClientController extends BaseController {
 		return "redirect:/client/sync";
 	}
 
-	private void timedb(String str) throws Exception {
+	private void timedb(String str,String type) throws Exception {
 
 		SchedulerFactory factory = new StdSchedulerFactory();
 		Scheduler scheduler = factory.getScheduler();
 		try {
+			scheduler.clear();
+			JobDetail jobDetail = JobBuilder.newJob(SynUser.class)
+	                .withDescription("this sync Easc job") //job的描述
+	                .withIdentity("synUser", "ramGroup2") //job 的name和group
+	                .build();
 
-			scheduler.pauseTrigger("trigger", "ctrigger");
-			scheduler.unscheduleJob("trigger", "ctrigger");
-			scheduler.deleteJob("synUser", "group1");
+			if (type.equals("2")) {
+				 int length = Integer.parseInt(str);
+				 SimpleTrigger simpleTrigger = (SimpleTrigger)TriggerBuilder.newTrigger()
+		                 .withIdentity("myTrigger", "group1")// 定义名字和组
+		                 .withSchedule(simpleSchedule()
+		                	        .withIntervalInMinutes(length)
+		                	        .repeatForever())
+		                 .build();
+				 scheduler.scheduleJob(jobDetail, simpleTrigger);
 
-			JobDetail jobDetail = new JobDetail("synUser", "group1", SynUser.class);
+			}else {
+				 Trigger trigger = TriggerBuilder.newTrigger()
+		                    .withDescription("")
+		                    .withIdentity("ramTrigger", "ramTrigger2")
+		                    .withSchedule(CronScheduleBuilder.cronSchedule(str)) 
+		                    .build();	 
+				 		
+				 scheduler.scheduleJob(jobDetail, trigger);
+				
+			}
 
-			CronTrigger trigger = new CronTrigger("trigger", "ctrigger");
-
-			CronExpression cronExpression = new CronExpression(str);
-
-			trigger.setCronExpression(cronExpression);
-
-			scheduler.scheduleJob(jobDetail, trigger);
-
-			scheduler.start();
+		 scheduler.start();
 
 		} catch (SchedulerException e) {
 
@@ -267,30 +282,7 @@ public class ClientController extends BaseController {
 		}
 	}
 	
-	private void timedb2(String str) throws Exception {
-	    int length = Integer.parseInt(str);
-	    SchedulerFactory factory = new StdSchedulerFactory();
-        Scheduler scheduler = factory.getScheduler();
-        try {
 
-            scheduler.pauseTrigger("trigger", "ctrigger");
-            scheduler.unscheduleJob("trigger", "ctrigger");
-            scheduler.deleteJob("synUser", "group1");
-
-            JobDetail jobDetail = new JobDetail("synUser", "group1", SynUser.class);
-
-            DateIntervalTrigger trigger = new DateIntervalTrigger("trigger", "ctrigger", IntervalUnit.MINUTE, length);
-
-
-            scheduler.scheduleJob(jobDetail, trigger);
-
-            scheduler.start();
-
-        } catch (SchedulerException e) {
-
-            e.printStackTrace();
-        }
-    }
 
 	/**
 	 * 新增

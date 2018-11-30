@@ -4,41 +4,46 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.util.AppUtil;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.Const;
-import com.fh.util.GetPinyin;
-import com.fh.util.PageData;
-import com.fh.util.Tools;
-import com.fh.util.Jurisdiction;
-import com.fh.util.MD5;
+import com.fh.entity.wztk.AppPushEntity;
+import com.fh.entity.wztk.BaseRequestEntity;
+import com.fh.entity.wztk.BodyEntity;
+import com.fh.entity.wztk.HeadEntity;
+import com.fh.entity.wztk.ObjectContentEntity;
 import com.fh.service.wiztalk.organization.OrganizationService;
 import com.fh.service.wiztalk.orguser.OrgUserService;
 import com.fh.service.wiztalk.tenant.TenantService;
 import com.fh.service.wiztalk.wizapp.WizAppService;
 import com.fh.service.wiztalk.wizusers.WizUsersService;
+import com.fh.util.AppUtil;
+import com.fh.util.Const;
+import com.fh.util.Jurisdiction;
+import com.fh.util.MD5;
+import com.fh.util.PageData;
+import com.fh.util.Tools;
+import com.google.gson.Gson;
+import com.skysea.pushing.api.MessagePublisher;
+import com.skysea.pushing.api.PushInfrastructure;
+import com.skysea.pushing.xmpp.XMPPPushInfrastructure;
 
 /** 
  * 类名称：WizUsersController
@@ -132,7 +137,7 @@ public class WizUsersController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
-			if(wizusersService.findByUName(pd) != null){
+			if(wizusersService.findByUName(pd).size()>0){
 				errInfo = "error";
 			}
 		} catch(Exception e){
@@ -153,7 +158,7 @@ public class WizUsersController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
-			if(wizusersService.findByUE(pd) != null){
+			if(wizusersService.findByUE(pd) .size()>0){
 				errInfo = "error";
 			}
 		} catch(Exception e){
@@ -177,7 +182,7 @@ public class WizUsersController extends BaseController {
 		String ORG_ID = pd.getString("ORG_ID");
 		String NICKNAME=pd.getString("NICKNAME");
 		if (Tools.notEmpty(NICKNAME)) {
-			pd.put("NAME_QUANPIN", GetPinyin.getPingYin(NICKNAME));
+			pd.put("NAME_QUANPIN",pd.getString("NAME"));
 
 		}
 		pd.put("NAME_PY", pd.getString("NAME"));
@@ -410,15 +415,16 @@ public class WizUsersController extends BaseController {
 		pd = this.getPageData();
 		try {
 		    String ORG_ID = pd.getString("ORG_ID");
+		    String   TENANT_NAME ="";
+		    pd = wizusersService.findById(pd);
+		    PageData tIdpd = tenantService.findById(pd);
+		    TENANT_NAME=tIdpd.getString("NAME");
             if(null != ORG_ID && !"".equals(ORG_ID)){
-                pd = wizusersService.findById(pd);    //根据ID读取,必须要放在前面，要不后面就会被替换掉。
+                   //根据ID读取,必须要放在前面，要不后面就会被替换掉。
                 ORG_ID = ORG_ID.trim();
                 pd.put("PARENT_ID", ORG_ID);//调用以前org通过获取父类的方法获取租户ID；
                 PageData pDataTid=  organizationService.findTenantByPId(pd);//获取当前机构的租户的PD;   
-                String   TENANT_ID =pDataTid.getString("TENANT_ID");//租户ID
-                String   TENANT_NAME =pDataTid.getString("TENANT_NAME");//租户名字
-                pd.put("TENANT_ID", TENANT_ID);
-                pd.put("TENANT_NAME", TENANT_NAME);
+              
 
                 pd.put("ORGANIZATION_ID", ORG_ID);//
                 PageData pdOrg=  organizationService.findById(pd);//获取当前机构的PD;
@@ -426,7 +432,7 @@ public class WizUsersController extends BaseController {
                 pd.put("ORG_NAME", ORG_NAME);
                 pd.put("ORG_ID", ORG_ID);
             }
-		    
+            pd.put("TENANT_NAME", TENANT_NAME);
 			mv.setViewName("wiztalk/wizusers/wizusers_edit");
 			//List rentList = tenantService.listAllappERRents();//列出所有租户的供下拉框选择。
 			List orgList = organizationService.listAll(pd);//列出所有租户的供下拉框选择。
@@ -595,67 +601,77 @@ public class WizUsersController extends BaseController {
 		return AppUtil.returnObject(pd, map);
 	}
 	
-	/*
-	 * 导出到excel
-	 * @return
-	 */
-	@RequestMapping(value="/excel")
-	public ModelAndView exportExcel(){
-		logBefore(logger, "导出WizUsers到excel");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
-		ModelAndView mv = new ModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		try{
-			Map<String,Object> dataMap = new HashMap<String,Object>();
-			List<String> titles = new ArrayList<String>();
-			titles.add("名称");	//1
-			titles.add("nickname");	//2
-			titles.add("avatar");	//3
-			titles.add("name_py");	//4
-			titles.add("name_quanpin");	//5
-			titles.add("STATUS");	//6
-			titles.add("RAND");	//7
-			titles.add("PASSWORD");	//8
-			titles.add("tenant_id");	//9
-			titles.add("LEVEL");	//10
-			titles.add("email");	//11
-			titles.add("mobile");	//12
-			titles.add("tel");	//13
-			titles.add("AREA");	//14
-			titles.add("created");	//15
-			titles.add("updated");	//16
-			dataMap.put("titles", titles);
-			List<PageData> varOList = wizusersService.listAll(pd);
-			List<PageData> varList = new ArrayList<PageData>();
-			for(int i=0;i<varOList.size();i++){
-				PageData vpd = new PageData();
-				vpd.put("var1", varOList.get(i).getString("NAME"));	//1
-				vpd.put("var2", varOList.get(i).getString("NICKNAME"));	//2
-				vpd.put("var3", varOList.get(i).getString("AVATAR"));	//3
-				vpd.put("var4", varOList.get(i).getString("NAME_PY"));	//4
-				vpd.put("var5", varOList.get(i).getString("NAME_QUANPIN"));	//5
-				vpd.put("var6", varOList.get(i).getString("STATUS"));	//6
-				vpd.put("var7", varOList.get(i).getString("RAND"));	//7
-				vpd.put("var8", varOList.get(i).getString("PASSWORD"));	//8
-				vpd.put("var9", varOList.get(i).getString("TENANT_ID"));	//9
-				vpd.put("var10", varOList.get(i).get("LEVEL").toString());	//10
-				vpd.put("var11", varOList.get(i).getString("EMAIL"));	//11
-				vpd.put("var12", varOList.get(i).getString("MOBILE"));	//12
-				vpd.put("var13", varOList.get(i).getString("TEL"));	//13
-				vpd.put("var14", varOList.get(i).getString("AREA"));	//14
-				vpd.put("var15", varOList.get(i).getString("CREATED"));	//15
-				vpd.put("var16", varOList.get(i).getString("UPDATED"));	//16
-				varList.add(vpd);
-			}
-			dataMap.put("varList", varList);
-			ObjectExcelView erv = new ObjectExcelView();
-			mv = new ModelAndView(erv,dataMap);
-		} catch(Exception e){
-			logger.error(e.toString(), e);
-		}
-		return mv;
-	}
+	@RequestMapping(value="/pushAppMsg")
+	@ResponseBody
+	 public void pushAppMsg(String appid, String appName, String body, String
+			 title, int MessageType,
+			 List<String> toUsers) throws Exception {
+			
+		
+			
+			 HashMap<String, String> arti = new HashMap<String, String>();
+			
+			 // baseRequest
+			BaseRequestEntity baseRequest = new BaseRequestEntity();
+			 baseRequest.setDeviceID("");
+			 baseRequest.setToken(appid);
+			 baseRequest.setUid("");
+			
+			 List<BodyEntity> bodys = new ArrayList<BodyEntity>();
+			
+			 BodyEntity bodyEntity1 = new BodyEntity();
+			 bodyEntity1.setContent(body);
+			 bodys.add(bodyEntity1);
+			
+			 HeadEntity headEntity1 = new HeadEntity();
+			 headEntity1.setContent(title);
+			 headEntity1.setPubTime(System.currentTimeMillis());
+			
+			ObjectContentEntity objectContent = new ObjectContentEntity();
+			 objectContent.setBody(bodys);
+			 objectContent.setAppId(appid);
+			 objectContent.setHead(headEntity1);
+			
+			 List<String> sessions = new ArrayList<String>();
+			 sessions.add("all");
+			
+			 AppPushEntity entity = new AppPushEntity();
+			 entity.setBaseRequest(baseRequest);
+			 entity.setContent(title);
+			 entity.setExpire(3600000L);
+			 entity.setMsgType(MessageType);
+			 entity.setObjectContent(objectContent);
+			 entity.setSessions(sessions);
+			 entity.setStatusId("9999");
+			
+			 List<String> touserNames = new ArrayList<String>();
+			 List<String> touserIds = new ArrayList<String>();
+			/* for (String name : toUsers) {
+			 String id = sendGet("http:localhost/app/client/device/getUserIdByName/"
+			 + name);
+			 if (!id.equals("")) {
+			 touserNames.add(id + "@user");
+			 touserIds.add(id);
+			 }
+			 }*/
+			
+			 entity.setToUserNames(touserNames);
+			
+			 arti.put("app", new Gson().toJson(entity));
+			 for (String uid : touserIds) {
+			
+			 }
+			
+			 
+			 PushInfrastructure factory = new XMPPPushInfrastructure("skysea.com", "http://192.168.50.101:9090/plugins/push/packet");
+		        
+		        /** 获得事件发布器(可以单例保存) **/
+		        MessagePublisher messagePublisher = factory.getMessagePublisher();
+		        messagePublisher.publish("58db3e70-ef6d-481d-95af-4790f6a883b9","", arti);
+			 }
+	
+	
+	
 	
 	/* ===============================权限================================== */
 	public Map<String, String> getHC(){

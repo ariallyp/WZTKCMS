@@ -211,6 +211,10 @@
 								<c:if test="${pd.TYPE == 'h5' }">selected</c:if>>h5</option>
 					</select></td>
 				</tr>
+				
+				
+				
+				
 			<%-- 	<tr>
 					<td style="width: 70px; text-align: right; padding-top: 13px;">图标:</td>
 					<td><input type="text" name="AVATAR" id="AVATAR"
@@ -221,6 +225,21 @@
 					<td style="width: 70px; text-align: right; padding-top: 13px;">命名:</td>
 					<td><input type="text" name="NAME_PY" id="NAME_PY"
 						value="${pd.NAME_PY}" maxlength="32" placeholder="命名" title="命名" /></td>
+				</tr>
+				
+					<tr>
+					<td style="width: 70px; text-align: right; padding-top: 13px;">状态:</td>
+					<td style="vertical-align: top;"><select class="chzn-select"
+						name="STATUS" id="STATUS" data-placeholder="请选择"
+						style="vertical-align: top; ">
+							
+							<option value="0"
+								<c:if test="${pd.STATUS == 0 }">selected</c:if>>上架</option>
+							<option value="1"
+								<c:if test="${pd.STATUS == 1 }">selected</c:if>>下架</option>
+								<option value="2"
+								<c:if test="${pd.STATUS == 2 }">selected</c:if>>审核</option>
+					</select></td>
 				</tr>
 				<tr>
 					<td style="width: 70px; text-align: right; padding-top: 13px;">全名:</td>

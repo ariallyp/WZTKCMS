@@ -110,7 +110,7 @@
 		<if test="pd.NAME != null and pd.NAME != ''"><!-- 关键词检索 -->
 			and
 				(
-					 a.VER_NAME LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
+					 b.name LIKE CONCAT(CONCAT('%', #{pd.NAME}),'%')
 					
 				)
 		</if>

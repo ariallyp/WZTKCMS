@@ -54,41 +54,38 @@
 		
 		<div id="zhongxin">
 		<table id="table_report" class="table table-striped table-bordered table-hover">
+			
 			<tr>
-				<td style="width:150px;text-align: right;padding-top: 13px;">APPID:</td>
-				<td style="color:#fff;"><input type="text" name="WZTK_easc_appId" id="WZTK_easc_appId" value="${pd.WZTK_easc_appId}" maxlength="200"  title="应用名"/></td>
+				<td style="width:150px;text-align: right;padding-top: 13px;">Easc tenantId:</td>
+				<td><input type="text" name="tenantId"  value="${eascParam.tenantId}" maxlength="200"  title="租户ID"/></td>
+			</tr>
+			<tr>
+				<td style="width:150px;text-align: right;padding-top: 13px;">Easc appID:</td>
+				<td style="color:#fff;"><input type="text" name="appId" value="${eascParam.appId}" maxlength="200"  title="应用名"/></td>
 			</tr>
 			
 		 	<tr>
-				<td style="width:150px;text-align: right;padding-top: 13px;">获取所有机构方法名称:</td>
-				<td><input type="text" size="400" name="WZTK_easc_getAllOrganizationMethodName" id="WZTK_easc_getAllOrganizationMethodName" value="${pd.WZTK_easc_getAllOrganizationMethodName}" maxlength="200"  title="应用名"/></td>
+				<td style="width:150px;text-align: right;padding-top: 13px;">Easc domain:</td>
+				<td><input type="text" size="400" name="domain" value="${eascParam.domain}" maxlength="200"  title="接口地址"/></td>
 			</tr>
 			<tr>
-				<td style="width:150px;text-align: right;padding-top: 13px;">获取所有用户方法名称:</td>
-				<td><input type="text" name="WZTK_easc_getAllSeUserMethodName" id="WZTK_easc_getAllSeUserMethodName" value="${pd.WZTK_easc_getAllSeUserMethodName}" maxlength="200"  title="应用名"/></td>
+				<td style="width:150px;text-align: right;padding-top: 13px;">Easc Port:</td>
+				<td><input type="text" name="port"  value="${eascParam.port}" maxlength="200"  title="端口号"/></td>
 			</tr>
 			<tr>
-				<td style="width:150px;text-align: right;padding-top: 13px;">获取机构方用户法名称:</td>
-				<td><input type="text" name="WZTK_easc_getAllUserOrgInfoMethodName" id="WZTK_easc_getAllUserOrgInfoMethodName" value="${pd.WZTK_easc_getAllUserOrgInfoMethodName}" maxlength="200"  title="应用名"/></td>
+				<td style="width:150px;text-align: right;padding-top: 13px;">Easc user:</td>
+				<td><input type="text" name="userName"  value="${eascParam.userName}" maxlength="200"  title="用户名"/></td>
 			</tr>
 			<tr>
-				<td style="width:150px;text-align: right;padding-top: 13px;">是否同步租户:</td>
-				<td><input type="text" name="WZTK_easc_isSyncTenantId" id="WZTK_easc_isSyncTenantId" value="${pd.WZTK_easc_isSyncTenantId}" maxlength="200"  title="应用名"/></td>
+				<td style="width:150px;text-align: right;padding-top: 13px;">Easc Pwd:</td>
+				<td><input type="text" name="eascPwd"  value="${eascParam.pwd}" maxlength="200"  title="密码"/></td>
 			</tr> 
 			<tr>
-				<td style="width:150px;text-align: right;padding-top: 13px;">机构ID:</td>
-				<td><input type="text" name="WZTK_easc_tenantIdOrgId" id="WZTK_easc_tenantIdOrgId" value="${pd.WZTK_easc_tenantIdOrgId}" maxlength="200"  title="应用名"/></td>
+				<td style="width:150px;text-align: right;padding-top: 13px;">Easc Uid:</td>
+				<td><input type="text" name="userId"  value="${eascParam.userId}" maxlength="200"  title="用户ID"/></td>
 			</tr>
 			
-			<tr>
-				<td style="width:150px;text-align: right;padding-top: 13px;">EASC 服务器地址:</td>
-				<td><input type="text" name="WZTK_easc_wsdlsite" id="WZTK_easc_wsdlsite" value="${pd.WZTK_easc_wsdlsite}" maxlength="200"  title="应用名"/></td>
-			</tr>
-			
-			<tr>
-				<td style="width:150px;text-align: right;padding-top: 13px;">EASC WSDL:</td>
-				<td><input type="text" name="WZTK_easc_appwsdl" id="WZTK_easc_appwsdl" value="${pd.WZTK_easc_appwsdl}" maxlength="200"  title="应用名"/></td>
-			</tr>
+		
 			
 			
 			

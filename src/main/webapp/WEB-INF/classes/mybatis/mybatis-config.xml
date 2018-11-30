@@ -13,7 +13,6 @@
 		<typeAlias type="com.fh.entity.system.User" alias="User"/>
 		<typeAlias type="com.fh.entity.system.Role" alias="Role"/>
 		<typeAlias type="com.fh.entity.system.Menu" alias="Menu"/>
-		<typeAlias type="com.fh.entity.manager.ORG" alias="ORG"/>
 		<typeAlias type="com.fh.entity.manager.Rent" alias="Rent"/>
 		<typeAlias type="com.fh.util.PageData" alias="pd"/>
 		<!-- 分页 -->

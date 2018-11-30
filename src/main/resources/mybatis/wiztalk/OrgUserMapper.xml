@@ -54,6 +54,22 @@
 				USER_ID = #{WIZUSERS_ID}
 	</update>
 	
+			<!-- 通过ID获取数据 -->
+	<select id="findByOrgIDAndUid" parameterType="pd" resultType="pd">
+		select 
+			ID,	
+			USER_ID,	
+			SORT,	
+			ORG_ID
+		from 
+			org_user
+		where 
+			USER_ID = #{USER_ID}
+			and 
+			ORG_ID= #{ORG_ID}
+	</select>
+	
+	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 
@@ -66,6 +82,8 @@
 			ID = #{ID}
 	</select>
 	
+	
+
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">

@@ -123,16 +123,18 @@ public class WizUsersService {
 	/*
 	* 通过username获取数据
 	*/
-	public PageData findByUName(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("WizUsersMapper.findByUName", pd);
+	public List<PageData> findByUName(PageData pd)throws Exception{
+		return (List<PageData>)dao.findForList("WizUsersMapper.findByUName", pd);
 	}
-	
+	public List<PageData> findByUNameID(PageData pd)throws Exception{
+		return (List<PageData>)dao.findForList("WizUsersMapper.findByUNameID", pd);
+	}
 	
 	/*
 	* 通过email获取数据
 	*/
-	public PageData findByUE(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("WizUsersMapper.findByUE", pd);
+	public List<PageData> findByUE(PageData pd)throws Exception{
+		return (List<PageData>)dao.findForList("WizUsersMapper.findByUE", pd);
 	}
 	
 	/*

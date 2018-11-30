@@ -34,7 +34,7 @@
 					</td> -->
 					<td style="vertical-align:top;"> 
 					 	<select class="chzn-select" name="TYPE" id="field2" data-placeholder="请选择类型" style="vertical-align:top;width: 120px;">
-							<option value=""></option>
+							<option value="${pd.TYPE }"></option>
 							<option value="">全部</option>
 							<option value="Android">Android</option>
 							<option value="IOS">IOS</option>
@@ -58,7 +58,7 @@
 						<th  width="2%" class="center">
 						<label><input type="checkbox" id="zcheckbox" /><span class="lbl"></span></label>
 						</th>
-						<th width="5%" class="center">序号222</th>
+						<th width="5%" class="center">序号</th>
 						<th width="5%" class="center">类型</th>
 						<th width="5%" class="center">版本号</th>
 						<th width="5%" class="center">版本名称</th>
