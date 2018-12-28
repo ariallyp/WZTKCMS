@@ -56,6 +56,7 @@ public class SyncDbService {
 	@Autowired
 	private TenantService tenantService;
 	private String errorMessage = "";
+	private  Integer errorTime=0;
 
 	public void syncdb() throws Exception {
 	}
@@ -120,7 +121,7 @@ public class SyncDbService {
 			}
 		}
 		 if (!errorMessage.isEmpty()) {
-			 i++;
+			 errorTime++;
 					List<String> rsmap =redisUtilService.hmget("WZTK_easc_eascParam_map","appId","domain","port","userName","pwd","tenantId","userId");
 					eascParam=new EascParam(rsmap.get(0), rsmap.get(1), rsmap.get(2), rsmap.get(3), rsmap.get(4), rsmap.get(5),rsmap.get(6));
 					Map<String, String> map = new HashMap<String, String>();
@@ -133,10 +134,12 @@ public class SyncDbService {
 					 map.put("userId", "");		
 					 redisUtilService.hmset("WZTK_easc_eascParam_map", map);
 					 Thread.sleep(3000);
-					 if (i<3) {
+					 if (errorTime<3) {
 						 this.synEascData() ;//重新回调同步方法
 					}else {
+						errorTime=0;
 						return errorMessage+"  "+i;
+						
 					}
 					
 					
@@ -256,13 +259,13 @@ public class SyncDbService {
 							pd.put("AVATAR", u.getString("AVATAR"));
 							pd.put("TEL", u.getString("TEL"));
 							pd.put("AREA", u.getString("AREA"));
-							pd.put("PASSWORD",u.get("PASSWORD"));
+							pd.put("PASSWORD","A074D0B95CA9922CAAB6C9BE40575D55");
 							pd.put("WIZUSERS_ID", u.getString("WIZUSERS_ID"));
 							usersService.edit(pd);
 
 						} else {
 							pd.put("MOBILE", "");
-							pd.put("PASSWORD", MD5.md5("123456789"));
+							pd.put("PASSWORD", "A074D0B95CA9922CAAB6C9BE40575D55");//不再同步密码，密码从easc上获取。
 							if(wizusersService.findByUName(pd).size()<=0){
 								usersService.save(pd);
 							}

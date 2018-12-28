@@ -1,29 +1,11 @@
 package com.fh.wsdl.service;
 
+import com.fh.entity.wztk.EascParam;
+import com.fh.util.Logger;
+
 import top.wiz.common.easc.EascAppHelper;
 import top.wiz.common.easc.EascAuthHelper;
-import top.wiz.common.easc.model.EascOrg;
-import top.wiz.common.easc.model.EascOrgUser;
-import top.wiz.common.easc.model.EascUser;
 import top.wiz.common.easc.model.dto.Result;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-
-import com.fh.entity.wztk.EascParam;
-import com.fh.service.redis.IRedisUtilService;
-import com.fh.util.Logger;
-import com.fh.util.MD5;
-import com.fh.util.SerializeUtil;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
 
 public class EascGetResultUtil {
 
